@@ -1,47 +1,62 @@
-import React, { useContext } from "react";
-import { CartContext } from "./Context/Context";
-import { RxCross1 } from "react-icons/rx"; // Replace with the correct path to your context file
+import React, { useContext, useEffect, useState } from "react";
+import { Cart } from "./Context/Context";
+import { RxCross1 } from "react-icons/rx";
 
-const Cart = ({ setshow }) => {
-  const { product } = useContext(CartContext); // Use your specific context
+const CartComponent = () => {
+  const { product, setProduct } = useContext(Cart);
+  const [Total, setTotal] = useState()
 
-  console.log(product);
+  // useEffect(() =>{
+  //  setTotal(product.reduce((acc, curr) => acc + Number(curr.price), 0))
+  // },[])
+  useEffect(() => {
+      let total = 0
+      for(let i=0; i<product.length; i++){
+        total+= Number(product[i].price)
+      }
+      setTotal(total)
+      
+  },[])
+
+
+   
+  const handleRemoveFromCart = (productId) => {
+    const updatedCart = product.filter((item) => item.id !== productId);
+    setProduct(updatedCart);
+  };
 
   return (
-    <div
-      onClick={() => setshow(false)}
-      className="mt-16 fixed top-0 left-0 w-full h-screen z-20  "
-    >
-      <div
-        className="max-w-[400px] w-full h-full bg-white absolute right-0 top-0 p-6"
-        onclick={(e) => e.stopPropagation()}
-      >
-        <RxCross1
-          className="absolute right-0 top-0 m-6 text-[24px] cursor-pointer"
-          onclick={() => setshow(false)}
-        />
-        <h3 className="pt-6 text-lg font-medium text-gray-600 uppercase">
-          Your cart
-        </h3>
-        <div className="mt-5">
-          {product?.map((el, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center"
-            >
-              <img className="h-[100px]" src={el.image} alt="" />
-              <div className="">
-                <h1 className="text-lg font-medium">{el.name}</h1>
-                <p className="text-2xl text-red-500 font-semibold">
-                  {el.price}
-                </p>
-              </div>
+    <div className="">
+      <h3 className="text-center text-xl font-semibold">Your Cart</h3>
+      <p>Total Price:{Total}</p>
+      <div className="container gap-3 mt-5 grid ">
+        {product?.map((el) => (
+          <div
+            key={el.id}
+            className="grid grid-cols-3 place-items-center"
+          >
+            <div className="col-span-1 w-full h-full max-w-[300px] max-h-[250px]">
+              <img
+                className=" w-full h-full object-cover"
+                src={el.image}
+                alt=""
+              />
             </div>
-          ))}
-        </div>
+            <div className="inline-flex gap-3 items-center  ">
+              <button className="border-2 px-2 grid place-items-center text-bold text-xl rounded-md">-</button>
+              <p>1</p>
+              <button className="border-2 px-2 grid place-items-center text-bold text-xl rounded-md">+</button>
+            </div>
+            <div className="space-y-3">
+              <h1 className="text-lg font-medium">{el.name}</h1>
+              <p className="text-2xl text-red-500 font-semibold">{el.price}</p>               
+               <p onClick={() => handleRemoveFromCart(el.id)} className="hover:bg-accentDark border-2 p-2 grid place-items-center bg-accent rounded-xl text-white"> Remove</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default Cart;
+export default CartComponent;

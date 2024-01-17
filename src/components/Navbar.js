@@ -2,7 +2,8 @@ import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import {AiOutlineShoppingCart, AiOutlineUser} from "react-icons/ai"
 import Cartcounterbadge from "./Cartcounterbadge";
-const Navbar = ({setShow}) => {
+import { Link } from "react-router-dom";
+const Navbar = () => {
   return (
     <div className="sticky top-0 z-10  bg-white  ">
       <div className="container lg:block hidden">
@@ -23,12 +24,12 @@ const Navbar = ({setShow}) => {
            <div className="items_wrapper ">
                <AiOutlineUser/>
            </div>
-           <div onClick={() => setShow(true)} className="items_wrapper relative cursor-pointer">
+           <Link to ="/cart" className="items_wrapper relative cursor-pointer">
                <AiOutlineShoppingCart/>
                <Cartcounterbadge  size="w-[25px] h-[25px]"/>
-           </div>
+           </Link>
           </div>
-        </div>
+        </div> 
       </div>
     </div>
   );
